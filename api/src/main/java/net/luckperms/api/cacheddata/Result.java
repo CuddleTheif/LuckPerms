@@ -23,23 +23,39 @@
  *  SOFTWARE.
  */
 
-package me.lucko.luckperms.sponge.calculator;
+package net.luckperms.api.cacheddata;
 
-import me.lucko.luckperms.sponge.service.model.LPPermissionService;
-import me.lucko.luckperms.sponge.service.model.LPSubject;
+import net.luckperms.api.node.Node;
 
-import net.luckperms.api.query.QueryOptions;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class FixedDefaultsProcessor extends DefaultsProcessor {
-    private final LPSubject defaultsSubject;
+/**
+ * Represents the result of a cached data lookup
+ *
+ * @param <T> the result type
+ * @since 5.4
+ */
+public interface Result<T, N extends Node> {
 
-    public FixedDefaultsProcessor(LPPermissionService service, QueryOptions queryOptions, LPSubject defaultsSubject, boolean overrideWildcards) {
-        super(service, queryOptions, overrideWildcards);
-        this.defaultsSubject = defaultsSubject;
-    }
+    /**
+     * Gets the underlying result.
+     *
+     * @return the underlying result
+     */
+    T result();
 
-    @Override
-    protected LPSubject getTypeDefaults() {
-        return this.defaultsSubject;
-    }
+    /**
+     * Gets the node that caused the result.
+     *
+     * @return the causing node
+     */
+    @Nullable N node();
+
+    /**
+     * Gets the result that this result overrides, if applicable.
+     *
+     * @return the overridden result
+     */
+    @Nullable Result<T, N> overriddenResult();
+
 }
